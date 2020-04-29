@@ -20,6 +20,10 @@
 
     ./run.sh j
     
+# Open Eclipse (C/C++)
+
+    ./run.sh c
+    
 # Open bash
 
     ./run.sh /bin/bash

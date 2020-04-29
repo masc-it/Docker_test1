@@ -1,5 +1,7 @@
 FROM ubuntu:18.04
 
+MAINTAINER onipot
+
 ARG USER=android
 
 RUN apt-get update && apt-get install -y \
@@ -15,9 +17,9 @@ RUN groupadd -g 1000 -r $USER
 RUN useradd -u 1000 -g 1000 --create-home -r $USER
 RUN adduser $USER libvirt
 RUN adduser $USER kvm
-#Change password
+
 RUN echo "$USER:$USER" | chpasswd
-#Make sudo passwordless
+
 RUN echo "${USER} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/90-$USER
 RUN usermod -aG sudo $USER
 RUN usermod -aG plugdev $USER
@@ -48,13 +50,19 @@ RUN ln -s /studio-data/profile/java .java
 RUN ln -s /studio-data/profile/gradle .gradle
 ENV ANDROID_EMULATOR_USE_SYSTEM_LIBS=1
 
-
 RUN wget -O eclipse_java.tar.gz http://mirror.dkm.cz/eclipse/technology/epp/downloads/release/2020-03/R/eclipse-java-2020-03-R-linux-gtk-x86_64.tar.gz
-# RUN mkdir eclipse_java && tar -xzvf eclipse_java.tar.gz -C eclipse_java --strip-components 1
-RUN tar -xzvf eclipse_java.tar.gz
-RUN chmod +x /home/$USER/eclipse/*
+RUN mkdir eclipse_java && tar -xzvf eclipse_java.tar.gz -C eclipse_java --strip-components 1
+
+RUN chmod +x /home/$USER/eclipse_java/*
+
+RUN wget -O eclipse_cpp.tar.gz https://mirrors.dotsrc.org/eclipse//technology/epp/downloads/release/2020-03/R/eclipse-cpp-2020-03-R-incubation-linux-gtk-x86_64.tar.gz
+RUN mkdir eclipse_cpp && tar -xzvf eclipse_cpp.tar.gz -C eclipse_cpp --strip-components 1
+
+RUN chmod +x /home/$USER/eclipse_cpp/*
+
 WORKDIR /home/$USER
-COPY provisioning/run_eclipse.sh run_eclipse.sh
-#RUN ln -s /studio-data/eclipse .eclipse
-#RUN ln -s /studio-data/eclipse/configuration eclipse/configuration
+
+COPY provisioning/run_eclipse_java.sh run_eclipse_java.sh
+COPY provisioning/run_eclipse_cpp.sh run_eclipse_cpp.sh
+
 ENTRYPOINT [ "/usr/local/bin/docker_entrypoint.sh" ]

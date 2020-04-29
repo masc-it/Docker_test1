@@ -10,7 +10,9 @@ args="$@"
 if [ "$args" = "a" ]; then
   args="~/android-studio/bin/studio.sh"
 elif [ "$args" = "j" ]; then
-  args="~/run_eclipse.sh"
+  args="~/run_eclipse_java.sh"
+elif [ "$args" = "c" ]; then
+  args="~/run_eclipse_cpp.sh"
 else
   echo "we"
 fi

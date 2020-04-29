@@ -1,10 +1,7 @@
 FROM ubuntu:18.04
 
-MAINTAINER Simon Egli <docker_android_studio_860dd6@egli.online>
-
 ARG USER=android
 
-# RUN dpkg --add-architecture i386
 RUN apt-get update && apt-get install -y \
         build-essential git neovim wget unzip sudo \
         libc6 libncurses5 libstdc++6 lib32z1 libbz2-1.0 \
